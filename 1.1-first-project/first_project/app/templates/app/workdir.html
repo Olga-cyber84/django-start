@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files in workdir</title>
+</head>
+<body>
+    <h1>Содержимое рабочей директории </h1>
+    {% for f in files_in_workdir %}
+        <ul>
+           <li>{{f}}</li> 
+        </ul>
+    {% endfor %}
+</body>
+</html>
