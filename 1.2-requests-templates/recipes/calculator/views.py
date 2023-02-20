@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 DATA = {
     'omlet': {
         'яйца, шт': 2,
@@ -16,15 +15,28 @@ DATA = {
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
     },
-    # можете добавить свои рецепты ;)
+    'cofe': {
+        'кофе, ст.л': 1,
+        'кипяток, мл': 250,
+    },
 }
 
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
+
+def main(request):
+    context = {
+        'recipe': DATA
+    }
+    return render(request, 'calculator/main.html', context)
+
+
+def get_ingredients(request, recipe):
+    servings = int(request.GET.get('servings', 1))
+    ingredients = {}
+
+    for ingredient, amount in DATA[recipe].items():
+        ingredients[ingredient] = f'{amount * servings: .2f}'
+
+    context = {
+        'recipe': ingredients
+    }
+    return render(request, 'calculator/index.html', context)
