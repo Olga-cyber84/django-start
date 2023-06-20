@@ -1,14 +1,12 @@
-# TODO: опишите необходимые обработчики, рекомендуется использовать generics APIView классы:
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, CreateAPIView
-from .serializers import MeasurementSerializer, SensorDetailSerializer
+from .serializers import MeasurementSerializer, SensorSerializer, SensorDetailSerializer
 from .models import Sensor, Measurement
-from django.shortcuts import get_object_or_404
 
 
-class SensorView(ListCreateAPIView):
+class SensorView(ListCreateAPIView): #создание датчика / вывод списка
     queryset = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
+    serializer_class = SensorSerializer
 
     def post(self, request):
         name = request.data.get('name')
@@ -21,12 +19,14 @@ class SensorUpdateView(RetrieveUpdateAPIView):
     queryset = Sensor.objects.all()
     serializer_class = SensorDetailSerializer
 
-    def get(self, request, pk):
-        queryset = Measurement.objects.select_related(
-            'sensor').filter(sensor=pk)
-        serializer_class = MeasurementSerializer
-        return Response(queryset)
-
+    def patch(self, request, pk):
+        one_sensor = Sensor.objects.get(id=pk)
+        name_default = one_sensor.name
+        description_default = one_sensor.description
+        one_sensor.name = request.data.get('name', name_default)
+        one_sensor.description = request.data.get('description', description_default)
+        one_sensor.save()
+        return Response({"status": "sensor's info updated"})
 
 class MeasurementView(CreateAPIView):
     queryset = Measurement.objects.all()
