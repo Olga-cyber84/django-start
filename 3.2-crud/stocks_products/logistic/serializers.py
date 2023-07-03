@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import serializers
 from .models import Product, Stock, StockProduct
 
@@ -39,14 +40,14 @@ class StockSerializer(serializers.ModelSerializer):
             )
         return stock
 
+
     def update(self, instance, validated_data):
         # достаем связанные данные для других таблиц
         positions = validated_data.pop('positions')
 
         # обновляем склад по его параметрам
         stock = super().update(instance, validated_data)
-        print('instance -->>> ', instance.id)
-        
+
         for item in positions:
             product = StockProduct.objects.filter(stock_id=instance.id).get(product_id = item['product'])
             price_default = product.price
@@ -55,5 +56,6 @@ class StockSerializer(serializers.ModelSerializer):
             product.price = item.get('price', price_default)
             product.quantity = item.get('quantity', quantity_default)
             product.save()
+
 
         return stock
