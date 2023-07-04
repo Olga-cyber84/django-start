@@ -20,11 +20,11 @@ Content-Type: application/json
 ###
 
 # обновление продукта +
-PATCH {{baseUrl}}/products/1/
+PATCH {{baseUrl}}/products/4/
 Content-Type: application/json
 
 {
-  "description": "Самые сочные и ароматные помидорки"
+  "description": "Очень хорошие"
 }
 
 ###
@@ -52,17 +52,17 @@ POST {{baseUrl}}/stocks/
 Content-Type: application/json
 
 {
-  "address": "Советская 110",
+  "address": "Вересаева 2",
   "positions": [
     {
-      "product": 1,
-      "quantity": 50,
-      "price": 150.50
+      "product": 3,
+      "quantity": 150,
+      "price": 250.50
     },
     {
-      "product": 4,
-      "quantity": 100,
-      "price": 1180
+      "product": 1,
+      "quantity": 1000,
+      "price": 180
     }
   ]
 }
@@ -70,20 +70,20 @@ Content-Type: application/json
 ###
 
 # обновляем записи на складе +
-PATCH {{baseUrl}}/stocks/1/
+PATCH {{baseUrl}}/stocks/7/
 Content-Type: application/json
 
 {
   "positions": [
     {
-      "product": 2,
-      "quantity": 10,
-      "price": 140.80
+      "product": 3,
+      "quantity": 350,
+      "price": 200.50
     },
     {
-      "product": 3,
-      "quantity": 500,
-      "price": 130.99
+      "product": 1,
+      "quantity": 1500,
+      "price": 80
     }
   ]
 }

@@ -2,44 +2,43 @@ from django.forms import ValidationError
 from rest_framework import serializers
 from .models import Product, Stock, StockProduct
 
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id','title','description']
+        fields = ['id', 'title', 'description']
 
 
 class ProductPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockProduct
-        fields = ['id','product', 'quantity', 'price']
+        fields = ['id', 'product', 'quantity', 'price']
     # настройте сериализатор для позиции продукта на складе
     pass
 
 
 class StockSerializer(serializers.ModelSerializer):
     positions = ProductPositionSerializer(many=True)
-    
+
     class Meta:
         model = Stock
-        fields = ['id','address','positions']
+        fields = ['id', 'address', 'positions']
 
     def create(self, validated_data):
         # достаем связанные данные для других таблиц
         positions = validated_data.pop('positions')
-        
+
         # создаем склад по его параметрам
         stock = super().create(validated_data)
-        
+
         for item in positions:
-             obj, created = StockProduct.objects.update_or_create(
-                price = item['price'],
-                product_id = item['product'].id,
-                stock_id = stock.id,
-                quantity = item['quantity'],
-                defaults={},
+            StockProduct.objects.create(
+                price=item['price'],
+                product=item['product'],
+                stock=stock,
+                quantity=item['quantity'],
             )
         return stock
-
 
     def update(self, instance, validated_data):
         # достаем связанные данные для других таблиц
@@ -49,13 +48,7 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().update(instance, validated_data)
 
         for item in positions:
-            product = StockProduct.objects.filter(stock_id=instance.id).get(product_id = item['product'])
-            price_default = product.price
-            quantity_default = product.quantity
-
-            product.price = item.get('price', price_default)
-            product.quantity = item.get('quantity', quantity_default)
-            product.save()
-
+            StockProduct.objects.update_or_create(
+                stock=instance, product=item['product'], defaults={'price': item['price'], 'quantity': item['quantity']})
 
         return stock
