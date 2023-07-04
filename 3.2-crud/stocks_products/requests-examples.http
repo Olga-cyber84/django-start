@@ -7,8 +7,8 @@ POST {{baseUrl}}/products/
 Content-Type: application/json
 
 {
-  "title": "Огурец",
-  "description": "Лучшие огурцы на рынке"
+  "title": "Ананас",
+  "description": "Хорош с шампанским"
 }
 
 ###
@@ -36,13 +36,13 @@ Content-Type: application/json
 ###
 
 # поиск продуктов по названию и описанию +
-GET {{baseUrl}}/products/?search=помидор
+GET {{baseUrl}}/products/?search=ор
 Content-Type: application/json
 
 ###
 
 # поиск складов, где есть определенный продукт +
-GET {{baseUrl}}/stocks/?search=огур
+GET {{baseUrl}}/stocks/?search=ана
 Content-Type: application/json
 
 ###
@@ -52,17 +52,17 @@ POST {{baseUrl}}/stocks/
 Content-Type: application/json
 
 {
-  "address": "Ленина 12",
+  "address": "Советская 110",
   "positions": [
     {
-      "product": 2,
-      "quantity": 250,
-      "price": 120.50
+      "product": 1,
+      "quantity": 50,
+      "price": 150.50
     },
     {
-      "product": 3,
+      "product": 4,
       "quantity": 100,
-      "price": 180
+      "price": 1180
     }
   ]
 }
